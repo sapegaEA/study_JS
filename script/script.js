@@ -7,4 +7,3 @@ let period = 6;
 
 alert('Hello');
 console.log('Привет, мир');
-console.log(5+5);
