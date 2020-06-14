@@ -1,28 +1,40 @@
 'use strict';
-let money = +prompt('Ваш месячный доход?', 50000);
+let isNumber = function(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+let money;
 let income = 'Фриланс';
 let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
 let deposit = confirm('Есть ли у вас депозит в банке?');
 let mission = 150000;
 let period = 7;
-let expenses1 = prompt('Введите обязательную статью расходов');
-let amount1 = prompt('Во сколько это обойдется?');
-let expenses2 = prompt('Введите обязательную статью расходов');
-let amount2 = prompt('Во сколько это обойдется?');
-let expensesMonth = +amount1 + +amount2;
 
+let start = function() {
+  do {
+    money = prompt('Ваш месячный доход?');
+  }
+  while (!isNumber(money));
+};
+start();
+
+let expenses = [];
 function getExpensesMonth(){
-  return expensesMonth;
+  let sum = 0;
+  
+  for (let i = 0; i < 2; i++) {
+
+    expenses[i] = prompt('Введите обязательную статью расходов');
+    
+    sum += +prompt('Во сколько это обойдется?');
+  }
+  return sum;
 }
+let expensesMonth = getExpensesMonth();
+
 function getAccumulatedMonth(){
   return money - expensesMonth;
 }
-
 let accumulatedMonth = getAccumulatedMonth();
-
-function getTargetMonth(){
-  return Math.ceil(mission/accumulatedMonth);
-}
 
 let budgetDay = Math.floor(accumulatedMonth/30);
 
@@ -33,9 +45,18 @@ showTypeOf(money);
 showTypeOf(income);
 showTypeOf(deposit);
 
-console.log('Расходы за месяц ' + getExpensesMonth() + ' рублей');
+console.log('Расходы за месяц ' + expensesMonth + ' рублей');
 console.log(addExpenses.split(', '));
-console.log('Цель будет достигнута за: ' + getTargetMonth() + ' месяцев');
+
+function getTargetMonth(){
+  let targetMonth = Math.ceil(mission/accumulatedMonth);
+  if (targetMonth > 0){
+    return ('Цель будет достигнута за: ' + targetMonth + ' месяцев');
+  } else if (targetMonth <= 0){
+      return ('Цель не будет достигнута');
+  }}
+console.log(getTargetMonth());
+
 console.log('Бюджет на день: ' + budgetDay + ' рублей');
 
 let getStatusIncome = function(){
