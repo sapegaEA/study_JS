@@ -1,4 +1,5 @@
 'use strict';
+
 let isNumber = function(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
@@ -28,39 +29,26 @@ let appData = {
     let addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
     appData.addExpenses = addExpenses.toLowerCase().split(', ');
     appData.deposit = confirm('Есть ли у вас депозит в банке?');
-
-        
-        let message;
-        let arrExpenses = [];
-        for (let i = 0; i < 2; i++) {
-          arrExpenses = prompt('Введите обязательную статью расходов');
-
-          do {
-            message = prompt('Во сколько это обойдется?');
+    let message;
+    let arrExpenses = [];
+    for (let i = 0; i < 2; i++) {
+        arrExpenses = prompt('Введите обязательную статью расходов');
+            do {
+              message = prompt('Во сколько это обойдется?');
+            }
+            while (!isNumber(message));
+            appData.expenses[arrExpenses] = message;
           }
-          while (!isNumber(message));
-
-          appData.expenses[arrExpenses] = message;
-          }
-      
-        
   },
   getExpensesMonth: function(){
-
     for (let key in appData.expenses) {
       appData.expensesMonth += +appData.expenses[key];
      }
     return appData.expensesMonth;
-  
-    },
-  
-
+  },
   getBudget: function() {
     appData.budgetMonth = appData.budget - appData.expensesMonth;
     appData.budgetDay = Math.floor(appData.budgetMonth/30);
-    // return appData.budgetDay;
-    // return appData.budgetMonth;
-
   }, 
   getTargetMonth: function() {
     let targetMonth = Math.ceil(appData.mission/appData.budgetMonth);
@@ -87,16 +75,11 @@ appData.asking();
 appData.getExpensesMonth();
 appData.getBudget();
 
-console.log(appData.expensesMonth);
-
-// let accumulatedMonth = appData.getAccumulatedMonth();
-
-// let budgetDay = Math.floor(accumulatedMonth/30);
-
 console.log('Расходы за месяц ' + appData.expensesMonth + ' рублей');
-
 console.log(appData.getTargetMonth());
-
 console.log('Бюджет на день: ' + appData.budgetDay + ' рублей');
-
 console.log(appData.getStatusIncome());
+
+for (let key in appData) {
+  console.log('Наша программа включает в себя данные: ' + 'Свойства: ' + key + ' Значения: ' + appData[key]);
+ }
