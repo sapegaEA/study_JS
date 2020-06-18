@@ -57,11 +57,11 @@ let appData = {
     for (let i = 0; i < 2; i++) {
 
       do {
-        arrExpenses = prompt('Введите обязательную статью расходов');
+        arrExpenses = prompt('Введите обязательную статью расходов', 'Квартплата');
       } while (isNumber(arrExpenses) || !/[^\s]/.test(arrExpenses) || arrExpenses === null);
 
             do {
-              message = prompt('Во сколько это обойдется?');
+              message = prompt('Во сколько это обойдется?', '1000');
             }
             while (!isNumber(message));
             appData.expenses[arrExpenses] = message;
@@ -127,3 +127,23 @@ for (let key in appData) {
   console.log('Наша программа включает в себя данные: ' + 'Свойства: ' + key + ' Значения: ' + appData[key]);
  }
 
+let buttonCalculate = document.getElementById('start');
+let buttonPlus1 = document.getElementsByTagName('button')[0];
+let buttonPlus2 = document.getElementsByTagName('button')[1];
+let checkboxDeposit = document.querySelector('#deposit-check');
+let additionalIncome = document.querySelectorAll('.additional_income-item');
+let resultBudgetMonth = document.getElementsByClassName('result-budget_month')[0];
+let resultBudgetDay = document.getElementsByClassName('result-budget_day')[0];
+let resultExpensesMonth = document.getElementsByClassName('result-expenses_month')[0];
+let resultAdditionalIncome = document.getElementsByClassName('result-additional_income')[0];
+let resultAdditionalExpenses = document.getElementsByClassName('result-additional_expenses')[0];
+let resultIncomePeriod = document.getElementsByClassName('result-income_period')[0];
+let resultTargetmonth = document.getElementsByClassName('result-target_month')[0];
+let salary = document.querySelector('.salary-amount');
+let incomeTitle = document.querySelector('.income-title');
+let incomeAmount = document.querySelector('.income-amount');
+let expensesTitle = document.querySelector('.expenses-title');
+let expensesAmount = document.querySelector('.expenses-amount');
+let additionalExpenses = document.querySelector('.additional_expenses-item');
+let deposit = document.querySelector('#deposit-check');
+let periodRange = document.querySelector('.period-select');
