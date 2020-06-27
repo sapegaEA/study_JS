@@ -1,64 +1,81 @@
 'use strict';
 
-const todoControl = document.querySelector('.todo-control'),
-      headerInput = document.querySelector('.header-input'),
-      todoList = document.querySelector('.todo-list'),
-      todoCompleted = document.querySelector('.todo-completed');
-const todoData = [
-    {
-        value: 'Сварить кофе',
-        completed: false
-    },
-    {
-      value: 'Помыть посуду',
-      completed: true
-  }
-];
+const form = document.querySelector('.todo-control');
+const todoContainer = document.querySelector('.todo-container');
+const todo = document.querySelector('#todo');
+const completed = document.querySelector('#completed');
 
-const render = function() {
-  todoList.textContent = '';
-  todoCompleted.textContent = '';
+const readLocalStorage = () => JSON.parse(localStorage.getItem('todo')) || [];
 
+const output = () => {
+  const localData = readLocalStorage();
 
-  todoData.forEach(function(item) {
-    const li = document.createElement('li');
-    li.classList.add('todo-item');
-
-    li.innerHTML = '<span class="text-todo">' + item.value + '</span>' + 
-      '<div class="todo-buttons">' + 
-          '<button class="todo-remove"></button>' + 
-          '<button class="todo-complete"></button>' +
-      '</div>';
-
-      if(item.completed) {
-        todoCompleted.append(li);
-      } else {
-        todoList.append(li);
-      }
-
-      const btnTodoComplete = li.querySelector('.todo-complete');
-
-      btnTodoComplete.addEventListener('click', function() {
-        item.completed = !item.completed;
-        render();
-      });
+  todo.innerHTML = '';
+  completed.innerHTML = '';
+  
+  localData.forEach((item, i) => {
+    const newLi = document.createElement('li');
+    newLi.classList.add('todo-item');
+    newLi.setAttribute('data-id', i);
+    newLi.innerHTML = 
+    '<span class="text-todo">' + item.title + '</span>' + 
+    '<div class="todo-buttons">' + 
+    '<button class="todo-remove"></button>' + 
+    '<button class="todo-complete"></button>' +
+    '</div>';
     
+    (item.status === false) ? todo.append(newLi) : completed.append(newLi);
   });
-
 };
 
-todoControl.addEventListener('submit', function(event) {
-  event.preventDefault();
+output();
 
-  const newTodo = {
-    value: headerInput.value,
-    completed: false
+const insertToLocalStorage = data => {
+  const localData = readLocalStorage();
+  localData.push(data);
+  localStorage.setItem('todo', JSON.stringify(localData));
+  output();
 };
 
-  todoData.push(newTodo);
+const deleteLocalStorage = elem => {
+  const localData = readLocalStorage();
+  const parentId = +elem.closest('li').dataset.id;
+  localData.splice(parentId, 1);
+  localStorage.setItem('todo', JSON.stringify(localData));
+  output();
+};
 
-  render();
+const updateLocalStorage = elem => {
+  const localData = readLocalStorage();
+  const parentId = +elem.closest('li').dataset.id;
+  localData[parentId].status = true;
+  localStorage.setItem('todo', JSON.stringify(localData));
+  output();
+};
 
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const input = e.target.querySelector('input');
+     if(input.value.length === 0 || !/[^\s]/.test(input.value)){
+      return input.value = null;
+    }
+
+  const data = {
+    title: input.value,
+    status: false
+  };
+
+  insertToLocalStorage(data);
+  e.target.reset();
 });
 
-render();
+todoContainer.addEventListener('click', e=> {
+  const target = e.target;
+  if(target.closest('.todo-remove')) {
+    deleteLocalStorage(target);
+  } else if(target.closest('.todo-complete')) {
+    updateLocalStorage(target);
+  }
+});
+
