@@ -5,6 +5,7 @@ let isNumber = function(n) {
 
 
 let start = document.getElementById('start');
+let cancel = document.getElementById('cancel');
 let btnPlus = document.getElementsByTagName('button');
 let incomePlus = btnPlus[0];
 let expensesPlus = btnPlus[1];
@@ -64,6 +65,7 @@ let appData = {
       additionalIncomeValue.value = appData.addIncome.join(', ');
       targetMonthValue.value = Math.ceil(appData.getTargetMonth());
       document.querySelector('.period-select').addEventListener('change', appData.calcPeriod());
+      console.log(this);
   },
   addExpensesBlock: function(){
 
@@ -177,6 +179,38 @@ let appData = {
             addDisabled.removeAttribute('disabled', 'true');
         }
       },
+  reset: function() {
+
+      let btnReset = document.querySelector('#cancel');
+      btnReset.style.display = "block";
+
+      let removeStart = document.querySelector('#start');
+      removeStart.style.display = "none";
+
+      let disableInputs = document.querySelectorAll('input');
+      let index;
+      for (index = 0; index < 12; ++index) {
+        disableInputs[index].setAttribute('disabled', 'true');
+      }
+      
+            // this.budget = 0;
+            // this.budgetDay = 0;
+            // this.budgetincome = 0;
+            // this.budgetMonth = 0;
+            // this.incomeMonth = 0;
+            // this.expensesMonth = 0;
+            // this.deposit = false;
+            // this.percentDeposit = 0;
+            // this.moneyDeposit = 0;
+            // this.income = {};
+            // this.addIncome = [];
+            // this.expenses = {};
+            // this.addExpenses = [];
+      
+      },
+  reload() {
+    location.reload();
+    } 
 };
 appData.calcPeriod();
 addEventListener('mousemove', appData.buttonStart);
@@ -185,6 +219,8 @@ start.addEventListener('click', appData.start);
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 
+start.addEventListener('click', appData.reset);
+cancel.addEventListener('click', appData.reload);
 
 // appData.getInfoDeposit();
 
@@ -194,5 +230,3 @@ incomePlus.addEventListener('click', appData.addIncomeBlock);
 // for (let key in appData) {
 //   console.log('Наша программа включает в себя данные: ' + 'Свойства: ' + key + ' Значения: ' + appData[key]);
 //  }
-
-
